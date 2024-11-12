@@ -1,0 +1,24 @@
+1. Compilar e instalar el driver
+make
+sudo insmod ch341.ko
+
+
+2. Verificar si el dispositivo USB está detectado
+lsusb
+dmesg | grep ch341
+
+
+3. Conectar Arduino Uno y asignar puerto
+dmesg | grep tty
+
+
+4. Probar la conexión serie
+sudo apt-get install minicom
+minicom -b 9600 -D /dev/ttyUSB0
+
+ALTERNATIVA:
+screen /dev/ttyUSB0 9600
+
+
+5. (PARA DESINSTALAR)
+sudo rmmod ch341
