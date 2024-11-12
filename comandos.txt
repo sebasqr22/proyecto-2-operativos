@@ -1,2 +1,4 @@
-gcc -c mi_biblioteca.c -o mi_biblioteca.o
-ar rcs libmi_biblioteca.a mi_biblioteca.o
+gcc -c biblioteca.c -o biblioteca.o
+ar rcs libbiblioteca.a biblioteca.o
+gcc adaptador_biblioteca.c -L. -lbiblioteca -o adaptador
+./adaptador
