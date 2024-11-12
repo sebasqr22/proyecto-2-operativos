@@ -11,10 +11,15 @@ sudo insmod ch341.ko
 sudo rmmod ch341
 
 4. Verificar que el modulo se cargo correctamente
-dmesg | tail
+lsmod | grep driver
 
 (revisar los logs)
 dmesg | tail
 
 5. Crear el archivo de dispositivo
 ls /dev/ttyUSB*
+
+6. Cargarlo automaticamente
+sudo cp driver.ko /lib/modules/$(uname -r)/kernel/drivers/usb/serial/
+sudo depmod
+
