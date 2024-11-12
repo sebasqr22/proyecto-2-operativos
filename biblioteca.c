@@ -1,41 +1,39 @@
 #include "biblioteca.h"
 #include <fcntl.h>       // Para open
-#include <unistd.h>      // Para close, read, write
+#include <unistd.h>      // Para close, write
 #include <stdio.h>       // Para perror
 
-// Define la ruta al dispositivo USB (esto puede cambiar dependiendo del sistema)
-#define DEVICE_PATH "/dev/ttyUSB0"  // Ajusta esto a tu dispositivo
+#define DEVICE_PATH "/dev/ttyUSB0" 
 
-// Abre el dispositivo USB y devuelve el file descriptor
-int abrir_driver() {
-    int fd = open(DEVICE_PATH, O_RDWR);
+// Abre la conexión USB con el Arduino y devuelve el file descriptor
+int abrir_conexion() {
+    int fd = open(DEVICE_PATH, O_RDWR | O_NOCTTY | O_SYNC);
     if (fd == -1) {
-        perror("Error al abrir el dispositivo USB");
+        perror("Error al abrir la conexión con Arduino");
     }
     return fd;
 }
 
-// Cierra el dispositivo USB
-void cerrar_driver(int fd) {
+// Cierra la conexión USB con el Arduino
+void cerrar_conexion(int fd) {
     if (close(fd) == -1) {
-        perror("Error al cerrar el dispositivo USB");
+        perror("Error al cerrar la conexión con Arduino");
     }
 }
 
-// Escribe datos al dispositivo USB
-int escribir_datos(int fd, const char *buffer, size_t len) {
-    int bytes_written = write(fd, buffer, len);
+int enviar_comando(int fd, const char *comando) {
+    int bytes_written = write(fd, comando, strlen(comando));
     if (bytes_written == -1) {
-        perror("Error al escribir en el dispositivo USB");
+        perror("Error al enviar comando al Arduino");
     }
     return bytes_written;
 }
 
-// Lee datos desde el dispositivo USB
-int leer_datos(int fd, char *buffer, size_t len) {
-    int bytes_read = read(fd, buffer, len);
-    if (bytes_read == -1) {
-        perror("Error al leer desde el dispositivo USB");
+// Envía datos al Arduino por USB
+int enviar_datos(int fd, const char *buffer, size_t len) {
+    int bytes_written = write(fd, buffer, len);
+    if (bytes_written == -1) {
+        perror("Error al enviar datos al Arduino");
     }
-    return bytes_read;
+    return bytes_written;
 }
