@@ -1,57 +1,41 @@
 #include "biblioteca.h"
 #include <fcntl.h>       // Para open
 #include <unistd.h>      // Para close, read, write
-#include <sys/ioctl.h>   // Para ioctl
 #include <stdio.h>       // Para perror
 
-// Abre el driver de dispositivo y devuelve el file descriptor
+// Define la ruta al dispositivo USB (esto puede cambiar dependiendo del sistema)
+#define DEVICE_PATH "/dev/ttyUSB0"  // Ajusta esto a tu dispositivo
+
+// Abre el dispositivo USB y devuelve el file descriptor
 int abrir_driver() {
-    int fd = open("/dev/tu_driver", O_RDWR);
+    int fd = open(DEVICE_PATH, O_RDWR);
     if (fd == -1) {
-        perror("Error al abrir el driver");
+        perror("Error al abrir el dispositivo USB");
     }
     return fd;
 }
 
-// Cierra el file descriptor del driver
+// Cierra el dispositivo USB
 void cerrar_driver(int fd) {
     if (close(fd) == -1) {
-        perror("Error al cerrar el driver");
+        perror("Error al cerrar el dispositivo USB");
     }
 }
 
-// Mueve el dispositivo hacia la derecha
-int mover_derecha(int fd) {
-    if (ioctl(fd, COMANDO_MOVER_DERECHA) == -1) {
-        perror("Error en mover_derecha");
-        return -1;
-    }
-    return 0;
-}
-
-// Mueve el dispositivo hacia la izquierda
-int mover_izquierda(int fd) {
-    if (ioctl(fd, COMANDO_MOVER_IZQUIERDA) == -1) {
-        perror("Error en mover_izquierda");
-        return -1;
-    }
-    return 0;
-}
-
-// Lee datos desde el dispositivo
-int leer(int fd, char *buffer, size_t size) {
-    int bytes_read = read(fd, buffer, size);
-    if (bytes_read == -1) {
-        perror("Error en lectura");
-    }
-    return bytes_read;
-}
-
-// Escribe datos al dispositivo
-int escribir(int fd, const char *data, size_t size) {
-    int bytes_written = write(fd, data, size);
+// Escribe datos al dispositivo USB
+int escribir_datos(int fd, const char *buffer, size_t len) {
+    int bytes_written = write(fd, buffer, len);
     if (bytes_written == -1) {
-        perror("Error en escritura");
+        perror("Error al escribir en el dispositivo USB");
     }
     return bytes_written;
+}
+
+// Lee datos desde el dispositivo USB
+int leer_datos(int fd, char *buffer, size_t len) {
+    int bytes_read = read(fd, buffer, len);
+    if (bytes_read == -1) {
+        perror("Error al leer desde el dispositivo USB");
+    }
+    return bytes_read;
 }

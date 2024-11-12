@@ -1,0 +1,2 @@
+gcc -c mi_biblioteca.c -o mi_biblioteca.o
+ar rcs libmi_biblioteca.a mi_biblioteca.o
