@@ -1,4 +1,0 @@
-gcc -c biblioteca.c -o biblioteca.o
-ar rcs libbiblioteca.a biblioteca.o
-gcc adaptador_biblioteca.c -L. -lbiblioteca -o adaptador
-./adaptador
